@@ -1,0 +1,48 @@
+git 安装完成输入命令
+git config --global user.name "Your Name"
+git config --global user.email "email@example.com"
+
+创建版本库
+mkdir learngit
+cd learngit
+pwd  (显示当前文件夹)
+
+将learngit文件夹变成git管理的仓库，
+git init
+将文件添加到仓库分为两步
+1.添加文件
+git add reademe.txt     git add file2.txt file3.txt
+2.将文件提交到仓库
+git commit -m “写提交描述”
+
+
+
+显示当前仓库状态
+git status
+显示查看修改内容
+git diff reademe.txt
+
+查看最近到最远的提交日志
+git log/git log --pretty=oneline
+
+版本回退
+上一个版本
+git reset --hard HEAD^
+上上个版本
+git reset --hard HEAD^^
+100个^比较不容易数所以HEAD~100
+git reset --hard HEAD~100
+回退到指定版本
+git reset --hard 1094a
+查看每次保存的版本编号
+git reflog
+
+
+
+
+工作区和暂存区
+工作区：电脑上能看到的操作目录就是一个工作区
+版本库（Repository）
+工作区中隐藏目录.git,这个不是工作区，是Git的版本库
+
+版本库包括暂存区（stage）,/
