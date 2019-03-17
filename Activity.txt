@@ -1,0 +1,45 @@
+Android Activity总结 学习连接https://www.jianshu.com/p/51aaa65d5d25
+1.Activity的生命周期
+生命周期：onCreate()->onStart()->onResume()->onPause()->onStop()->onDestroy();
+2.Activity生命周期的状态
+onCreate()创建onDestory()销毁
+onStart()可见onStop()不可见
+onResume()获取焦点onPause()失去焦点
+3.Activity的之间的跳转
+A->B  
+onCreate()A- onStart()A-onResume()A-onPauseA-onCreate()B-onStart()B-onResume()B-onStop()A
+B直接返回键/finish()
+B->A onPause()B-onRestart()A-onStart()A-onResume()A-onStop()B-onDestory()B
+Home键 A过程  
+onCreate()-onStart()-onResume()-onPause()-onStop-onRestart()-onStart()-onResume()
+startActivityForResult启动B
+先执行onPause()B-onActivityResult()A-onRestart()A-onStart()A-onResume()A-onStop()B-onDestory()B
+4.横竖屏切换Activity的是生命周期
+1.如果没有设置android:configChanges，Activity的生命周期会销毁掉重新创建，可以将数据保存到onSaveInstanceState()
+2.如果设置了android:configChanges，Activity生命周期不会重新创建，onSaveInstanceState()也不会执行,只会执行onConfigurationChanged()
+5.Activity不可见创建时数据的保存
+onSaveInstanceState():在onPause()与onStop()方法之间执行通过Bundle保存数据，待Activity重新创建时在onCreate(Bundle)方法中取出。
+onSaveInstanceState()不一定完全会被调用，当一个Activity销毁/关闭时，不会再调用这个方法（因为要销毁当前的Activity没必要保存）如果调用 onSaveInstanceState()方法, 调用将发生在 onPause()或onStop()方法之前。
+6.Activity数据数据的传递有哪些方法
+intent 广播接受者 contentprovider static静态数据（public static XXX) File文件，SharedPreferences Sqlite
+7.Activity的启动模式    学习连接https://blog.csdn.net/mynameishuangshuai/article/details/51491074
+standard  singleTop singleTask singleInstance
+standard-标准模式，不指定模式系统默认启动Activity会重新创建一个新的实例，谁启动了该模式的Activity，该Activity就属于启动它的Activity的任务栈中，这个activity的生命周期会被重新调用
+singleTop-栈顶复用模式
+1.当前栈中已有该Activity的实例并且该实例位于栈顶时，不会新建实例，而是复用栈顶的实例，并且会将Intent对象传入，回调onNewIntent方法
+
+2.当前栈中已有该Activity的实例但是该实例不在栈顶时，其行为和standard启动模式一样，依然会创建一个新的实例
+
+3.当前栈中不存在该Activity的实例时，其行为同standard启动模式
+4.standard和singleTop启动模式都是在原任务栈中新建Activity实例，不会启动新的Task
+singleTask-栈内复用模式
+singleTask启动模式下启动Activity会根据taskAffinity去寻找当前是否存在对应名称的任务栈，并且standard模式，singleTop模式taskAffinity无效
+不存在，创建一个新的Task,并创建新的Activity实例入栈，到新创建的Task中。
+存在，查找该任务战中是否存在Activity实例
+       存在，将该实例上面的实例都出栈，回调Activity实例的onNewIntent()方法；
+       不存在，新建Activity入栈
+不同的Activity设置相同的taskAffinity,虽然不在同一个应用，但是
+Activity会被分配到同一个Task中去
+singInstance全局唯一模式
+该模式具备singleask的所有特性，区别在于该模式下Activity单独占用一个Task栈，具有全局唯一性，由于栈内复用的特性，后续请求均不会创建新的Activity实例，除非这个特殊的任务栈被销毁。
+学习连接https://blog.csdn.net/mynameishuangshuai/article/details/51491074
