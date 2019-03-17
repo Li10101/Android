@@ -46,3 +46,9 @@ git reflog
 工作区中隐藏目录.git,这个不是工作区，是Git的版本库
 
 版本库包括暂存区（stage）,/
+
+
+Git遇到的问题
+failed to push some refs to git
+可以通过如下命令进行代码合并【注：pull=fetch+merge]
+git pull --rebase origin master
